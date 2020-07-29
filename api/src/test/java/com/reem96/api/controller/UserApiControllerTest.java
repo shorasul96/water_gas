@@ -13,6 +13,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -39,8 +42,16 @@ class UserApiControllerTest {
 
     @Test
     void getAll() throws Exception {
+        UserDto dto = new UserDto();
+        dto.setUsername(USERNAME);
+        dto.setIsActive(IS_ACTIVE);
+
+        when(service.getAll()).thenReturn(Stream.of(dto).collect(Collectors.toList()));
+
         mvc.perform(get("/api/v1/users/")
                 .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].username").value(USERNAME))
+                .andExpect(jsonPath("$[0].isActive").value(IS_ACTIVE))
                 .andExpect(status().isOk());
     }
 

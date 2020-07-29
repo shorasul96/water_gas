@@ -1,4 +1,4 @@
-# Water & Gas monitoring app
+# Gas & Water Usage Monitoring Application
 
 ###### __Created by shorasul996@gmail.com__
 

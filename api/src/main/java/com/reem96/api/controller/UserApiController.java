@@ -5,6 +5,8 @@ package com.reem96.api.controller;
 import com.reem96.api.service.UserApiService;
 import com.reem96.domain.dto.UserDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,22 +22,24 @@ public class UserApiController {
     private final UserApiService userApiService;
 
     @GetMapping("/")
-    List<UserDto> getAll(){
+    List<UserDto> getAll() {
         return userApiService.getAll();
     }
 
     @GetMapping("/{id}")
-    UserDto getUserById(@PathVariable("id") Long id){
+    UserDto getUserById(@PathVariable("id") Long id) {
         return userApiService.getById(id);
     }
 
-    @PostMapping("/create")
-    public String createUser(@Valid @RequestBody UserDto userDto, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "ERROR: " + bindingResult.getAllErrors().get(0).getDefaultMessage();
+    @PostMapping("/")
+    public ResponseEntity<String> createUser(@RequestBody UserDto userDto) {
+
+        if (userDto.getUsername() == null || userDto.getUsername().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Unsuccess!");
+
         } else {
             userApiService.saveUser(userDto);
         }
-        return "successfully created";
+        return ResponseEntity.status(HttpStatus.CREATED).body("Success!");
     }
 }

@@ -35,4 +35,10 @@ public class GasApiService {
         gasEntity.setCreatedDate(LocalDateTime.now());
         gasRepository.save(gasEntity);
     }
+
+    public Long totalGasByUserId(Long userId) {
+        if (userId == null || userId < 1)
+            return 0L;
+        return gasRepository.findAllByUserId(userId).stream().mapToLong(GasEntity::getAmount).sum();
+    }
 }

@@ -6,7 +6,9 @@ import com.reem96.domain.constant.TableNames;
 import com.reem96.domain.dto.UserDto;
 import com.reem96.domain.entities.base.ModifierEntity;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.BeanUtils;
 

@@ -32,7 +32,7 @@ public class WaterApiController {
     }
 
     @ResponseBody
-    @PostMapping("/create")
+    @PostMapping("/")
     public ResponseEntity<String> createWater(@RequestBody WaterDto waterDto, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {

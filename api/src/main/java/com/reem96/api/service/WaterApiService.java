@@ -34,9 +34,16 @@ public class WaterApiService {
     public void saveWater(WaterDto waterDto) {
         WaterEntity waterEntity = new WaterEntity();
         BeanUtils.copyProperties(waterDto, waterEntity);
-        if (waterDto.getIsColdWater() == null)
-            waterEntity.setIsColdWater(true);
+        if (waterDto.getIsColdWater() == null) waterEntity.setIsColdWater(true);
         waterEntity.setCreatedDate(LocalDateTime.now());
         waterRepository.save(waterEntity);
+    }
+
+    public Long totalColdWaterByUserId(Long userId) {
+        return waterRepository.findAllByUserId(userId).stream().filter(WaterEntity::getIsColdWater).mapToLong(WaterEntity::getAmount).sum();
+    }
+
+    public Long totalHotWaterByUserId(Long userId) {
+        return waterRepository.findAllByUserId(userId).stream().filter(waterEntity -> !waterEntity.getIsColdWater()).mapToLong(WaterEntity::getAmount).sum();
     }
 }

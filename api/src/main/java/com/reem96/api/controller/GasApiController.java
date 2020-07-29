@@ -8,7 +8,6 @@ import com.reem96.domain.dto.GasDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -32,18 +31,14 @@ public class GasApiController {
     }
 
     @ResponseBody
-    @PostMapping("/create")
-    public ResponseEntity<String> createGas(@RequestBody GasDto gasDto, BindingResult bindingResult) {
+    @PostMapping("/")
+    public ResponseEntity<String> createGas(@RequestBody GasDto gasDto) {
 
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Unsuccess!");
-
-        } else {
-            if (userApiService.checkUser(gasDto.getUserId())) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User id not found");
-            }
-            gasApiService.saveGas(gasDto);
+        if (userApiService.checkUser(gasDto.getUserId())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User id not found");
         }
+        gasApiService.saveGas(gasDto);
+
         return ResponseEntity.status(HttpStatus.CREATED).body("Success!");
     }
 

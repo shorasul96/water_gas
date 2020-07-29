@@ -4,8 +4,7 @@ package com.reem96.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.reem96.domain.validation.user.CheckUniqueUsername;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;

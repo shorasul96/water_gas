@@ -1,20 +1,23 @@
 package com.reem96.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.reem96.api.service.UserApiService;
 import com.reem96.domain.dto.UserDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -25,24 +28,34 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class UserApiControllerTest {
 
-
-    private static final Long ID = 1L;
     private static final String USERNAME = "ADMIN99";
     private static final boolean IS_ACTIVE = true;
 
     @Autowired
     private MockMvc mvc;
 
+    @MockBean
+    private UserApiService service;
 
     @Test
     void getAll() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/v1/users/").accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk()).andExpect(MvcResult::getResponse);
+        mvc.perform(get("/api/v1/users/")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Test
     void getUserById() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/v1/users/1").accept(MediaType.APPLICATION_JSON))
+        UserDto dto = new UserDto();
+        dto.setUsername(USERNAME);
+        dto.setIsActive(IS_ACTIVE);
+
+        when(service.getById(anyLong())).thenReturn(dto);
+
+        mvc.perform(get("/api/v1/users/1")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.username").value(USERNAME))
+                .andExpect(jsonPath("$.isActive").value(IS_ACTIVE))
                 .andExpect(status().isOk());
     }
 
@@ -53,12 +66,10 @@ class UserApiControllerTest {
         dto.setUsername(USERNAME);
         dto.setIsActive(IS_ACTIVE);
 
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-        ObjectWriter objectWriter = mapper.writer().withDefaultPrettyPrinter();
-        String request = objectWriter.writeValueAsString(dto);
-
-        mvc.perform(MockMvcRequestBuilders.post("/api/v1/users/").contentType(MediaType.APPLICATION_JSON).content(request)).andExpect(status().isCreated());
+        mvc.perform(post("/api/v1/users/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(dto)))
+                .andExpect(status().isCreated());
 
     }
 }

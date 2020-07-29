@@ -8,7 +8,6 @@ import com.reem96.domain.dto.WaterDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,17 +32,13 @@ public class WaterApiController {
 
     @ResponseBody
     @PostMapping("/")
-    public ResponseEntity<String> createWater(@RequestBody WaterDto waterDto, BindingResult bindingResult) {
+    public ResponseEntity<String> createWater(@RequestBody WaterDto waterDto) {
 
-        if (bindingResult.hasErrors()) {
-            return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body("Unsuccess!");
-
-        } else {
-            if (userApiService.checkUser(waterDto.getUserId())) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User id not found");
-            }
-            waterApiService.saveWater(waterDto);
+        if (userApiService.checkUser(waterDto.getUserId())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User id not found");
         }
+        waterApiService.saveWater(waterDto);
+
         return ResponseEntity.status(HttpStatus.CREATED).body("Success!");
     }
 }

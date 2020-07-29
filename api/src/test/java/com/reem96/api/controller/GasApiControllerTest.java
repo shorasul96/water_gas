@@ -1,23 +1,27 @@
 package com.reem96.api.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
-import com.fasterxml.jackson.databind.SerializationFeature;
+import com.reem96.api.service.GasApiService;
 import com.reem96.domain.dto.GasDto;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Repository;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 
 // Created by Shorasul Sh. on 29.07.2020
@@ -33,15 +37,36 @@ class GasApiControllerTest {
     @Autowired
     private MockMvc mvc;
 
+    @MockBean
+    private GasApiService service;
+
     @Test
     void getAll() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/v1/gas/").accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk()).andExpect(MvcResult::getResponse);
+        GasDto dto = new GasDto();
+        dto.setUserId(USER_ID);
+        dto.setAmount(AMOUNT);
+
+        when(service.getAll()).thenReturn(Stream.of(dto).collect(Collectors.toList()));
+
+        mvc.perform(get("/api/v1/gas/")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].userId").value(USER_ID))
+                .andExpect(jsonPath("$[0].amount").value(AMOUNT))
+                .andExpect(status().isOk());
     }
 
     @Test
     void getByUserId() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.get("/api/v1/gas/1").accept(MediaType.APPLICATION_JSON))
+        GasDto dto = new GasDto();
+        dto.setUserId(USER_ID);
+        dto.setAmount(AMOUNT);
+
+        when(service.findByUserId(anyLong())).thenReturn(Stream.of(dto).collect(Collectors.toList()));
+
+        mvc.perform(get("/api/v1/gas/1")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$[0].userId").value(USER_ID))
+                .andExpect(jsonPath("$[0].amount").value(AMOUNT))
                 .andExpect(status().isOk());
     }
 
@@ -51,11 +76,9 @@ class GasApiControllerTest {
         dto.setAmount(AMOUNT);
         dto.setUserId(USER_ID);
 
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(SerializationFeature.WRAP_ROOT_VALUE, false);
-        ObjectWriter objectWriter = mapper.writer().withDefaultPrettyPrinter();
-        String request = objectWriter.writeValueAsString(dto);
-
-        mvc.perform(MockMvcRequestBuilders.post("/api/v1/gas/").contentType(MediaType.APPLICATION_JSON).content(request)).andExpect(status().isCreated());
+        mvc.perform(post("/api/v1/gas/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(dto)))
+                .andExpect(status().isCreated());
     }
 }

@@ -41,12 +41,13 @@ public class UserApiService {
         return null;
     }
 
-    public void saveUser(UserDto userDto) {
+    public UserDto saveUser(UserDto userDto) {
         UserEntity userEntity = new UserEntity();
         BeanUtils.copyProperties(userDto, userEntity);
         userEntity.setIsActive(true);
         userEntity.setCreatedDate(LocalDateTime.now());
         userRepository.save(userEntity);
+        return userDto;
     }
 
     public boolean checkUser(Long userId) {

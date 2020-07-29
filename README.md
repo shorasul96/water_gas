@@ -13,7 +13,7 @@ run Rest_API
 port 8090
 ```
 
-Use the **java 1.8** or **higher** [download](https://java.com/en/download/) to work with dataBase.
+Use the **java 1.8** or **higher** [download](https://java.com/en/download/) to working environment
 
 
 

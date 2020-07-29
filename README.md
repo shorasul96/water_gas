@@ -28,13 +28,13 @@ http://localhost:8090/api/v1/user/create    // POST new user
 **Water** Entity
 ``` javascript
 http://localhost:8090/api/v1/water           // get all waters
-http://localhost:8090/api/v1/water/{id}      // get by id
+http://localhost:8090/api/v1/water/{id}      // get by user id
 http://localhost:8090/api/v1/water/create    // POST new water
 ```
 
 **Gas** Entity
 ``` javascript
 http://localhost:8090/api/v1/gas           // get all gas
-http://localhost:8090/api/v1/gas/{id}      // get by id
+http://localhost:8090/api/v1/gas/{id}      // get by user id
 http://localhost:8090/api/v1/gas/create    // POST new gas
 ```

@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -53,6 +54,8 @@ class UserApiControllerTest {
                 .andExpect(jsonPath("$[0].username").value(USERNAME))
                 .andExpect(jsonPath("$[0].isActive").value(IS_ACTIVE))
                 .andExpect(status().isOk());
+
+//        verify(service).getAll();
     }
 
     @Test

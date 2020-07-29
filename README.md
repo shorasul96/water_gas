@@ -21,21 +21,21 @@ Use the **java 1.8** or **higher** [download](https://java.com/en/download/) to 
 ## REST API
 **User** Entity
 ``` javascript
-http://localhost:8090/api/v1/users          // GET all users
-http://localhost:8090/api/v1/user/{id}      // GET by id
-http://localhost:8090/api/v1/user/create    // POST new user
+localhost:8090/api/v1/users          // get all users
+localhost:8090/api/v1/user/{id}      // get by id (get history)
+localhost:8090/api/v1/user/create    // POST new user (submit)
 ```
 
 **Water** Entity
 ``` javascript
-http://localhost:8090/api/v1/water           // GET all waters
-http://localhost:8090/api/v1/water/{id}      // GET by user id
-http://localhost:8090/api/v1/water/create    // POST new water
+localhost:8090/api/v1/water           // get all waters
+localhost:8090/api/v1/water/{id}      // get by user id (get history)
+localhost:8090/api/v1/water/create    // POST new water (submit)
 ```
 
 **Gas** Entity
 ``` javascript
-http://localhost:8090/api/v1/gas           // GET all gases
-http://localhost:8090/api/v1/gas/{id}      // GET by user id
-http://localhost:8090/api/v1/gas/create    // POST new gas
+localhost:8090/api/v1/gas           // get all gas
+localhost:8090/api/v1/gas/{id}      // get by user id (get history)
+localhost:8090/api/v1/gas/create    // POST new gas (submit)
 ```

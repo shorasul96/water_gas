@@ -29,11 +29,12 @@ public class GasApiService {
         return gasRepository.findAllByUserId(id).stream().map(GasEntity::getDto).collect(Collectors.toList());
     }
 
-    public void saveGas(GasDto gasDto) {
+    public GasDto saveGas(GasDto gasDto) {
         GasEntity gasEntity = new GasEntity();
         BeanUtils.copyProperties(gasDto, gasEntity);
         gasEntity.setCreatedDate(LocalDateTime.now());
         gasRepository.save(gasEntity);
+        return gasDto;
     }
 
     public Long totalGasByUserId(Long userId) {

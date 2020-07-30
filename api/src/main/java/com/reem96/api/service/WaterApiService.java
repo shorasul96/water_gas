@@ -31,13 +31,14 @@ public class WaterApiService {
         return waterRepository.findAllByUserId(id).stream().map(WaterEntity::getDto).collect(Collectors.toList());
     }
 
-    public void saveWater(WaterDto waterDto) {
+    public WaterDto saveWater(WaterDto waterDto) {
         WaterEntity waterEntity = new WaterEntity();
         BeanUtils.copyProperties(waterDto, waterEntity);
         if (waterDto.getIsColdWater() == null)
             waterEntity.setIsColdWater(true);
         waterEntity.setCreatedDate(LocalDateTime.now());
         waterRepository.save(waterEntity);
+        return waterDto;
     }
 
     public Long totalColdWaterByUserId(Long userId) {

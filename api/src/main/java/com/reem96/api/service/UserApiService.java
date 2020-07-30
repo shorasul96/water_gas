@@ -6,7 +6,6 @@ import com.reem96.domain.dto.UserDto;
 import com.reem96.domain.entities.UserEntity;
 import com.reem96.domain.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -25,25 +24,27 @@ public class UserApiService {
 
 
     public List<UserDto> getAll() {
-        List<UserEntity> all = userRepository.findAll();
-        return all.stream().map(UserEntity::getDto).collect(Collectors.toList());
+        return userRepository
+                .findAll().stream()
+                .map(UserEntity::getDto)
+                .collect(Collectors.toList());
     }
 
     public UserDto getById(Long id) {
         Optional<UserEntity> optional = userRepository.findById(id);
-        if (optional.isPresent()) {
+        if (optional.isPresent()){
             UserDto dto = optional.get().getDto();
-            dto.setTotalGas(gasApiService.totalGasByUserId(dto.getId()));
-            dto.setTotalColdWater(waterApiService.totalColdWaterByUserId(dto.getId()));
-            dto.setTotalHotWater(waterApiService.totalHotWaterByUserId(dto.getId()));
+            dto.setTotalGas(gasApiService.totalGasByUserId(id));
+            dto.setTotalColdWater(waterApiService.totalColdWaterByUserId(id));
+            dto.setTotalHotWater(waterApiService.totalHotWaterByUserId(id));
             return dto;
         }
-        return null;
+        return new UserDto();
     }
 
     public UserDto saveUser(UserDto userDto) {
         UserEntity userEntity = new UserEntity();
-        BeanUtils.copyProperties(userDto, userEntity);
+        userEntity.setUsername(userDto.getUsername());
         userEntity.setIsActive(true);
         userEntity.setCreatedDate(LocalDateTime.now());
         userRepository.save(userEntity);
@@ -51,10 +52,6 @@ public class UserApiService {
     }
 
     public boolean checkUser(Long userId) {
-        if (userId == null || userId < 1) {
-            return true;
-        }
         return !userRepository.findById(userId).isPresent();
     }
-
 }

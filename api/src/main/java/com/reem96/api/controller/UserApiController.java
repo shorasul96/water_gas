@@ -7,7 +7,6 @@ import com.reem96.domain.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -32,7 +31,7 @@ public class UserApiController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<String> createUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<String> createUser(@Valid @RequestBody UserDto userDto) {
 
         if (userDto.getUsername() == null || userDto.getUsername().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Unsuccess!");

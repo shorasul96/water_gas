@@ -34,7 +34,8 @@ public class WaterApiService {
     public void saveWater(WaterDto waterDto) {
         WaterEntity waterEntity = new WaterEntity();
         BeanUtils.copyProperties(waterDto, waterEntity);
-        if (waterDto.getIsColdWater() == null) waterEntity.setIsColdWater(true);
+        if (waterDto.getIsColdWater() == null)
+            waterEntity.setIsColdWater(true);
         waterEntity.setCreatedDate(LocalDateTime.now());
         waterRepository.save(waterEntity);
     }

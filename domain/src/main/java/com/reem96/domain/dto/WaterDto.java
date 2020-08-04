@@ -3,24 +3,26 @@ package com.reem96.domain.dto;
 // Created by Shorasul Sh. on 29.07.2020
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.sun.istack.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import com.reem96.domain.validation.water.CheckUserForWater;
+import lombok.Data;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
-@Getter
-@Setter
+@Data
+@CheckUserForWater
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class WaterDto implements Serializable {
 
     private Long id;
-    @NotNull
+    @NotNull(message = "Please, fill the field amount")
+    @Min(value = 1, message = "Field amount, must be positive number")
     private Long amount;
-    @NotNull
+
     private Boolean isColdWater;
 
-    @NotNull
+    @NotNull(message = "Please, fill the field userId")
     private Long userId;
     private UserDto userDto;
 

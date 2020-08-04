@@ -3,15 +3,15 @@ package com.reem96.domain.dto;
 // Created by Shorasul Sh. on 29.07.2020
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.Getter;
-import lombok.Setter;
+import com.reem96.domain.validation.gas.CheckUserForGas;
+import lombok.Data;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
-@Getter
-@Setter
+@Data
+@CheckUserForGas
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class GasDto implements Serializable {
 

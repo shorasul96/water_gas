@@ -1,19 +1,12 @@
 package com.reem96.api.service;
 
 import com.reem96.domain.dto.UserDto;
-import com.reem96.domain.entities.UserEntity;
-import com.reem96.domain.repositories.UserRepository;
-import org.apache.catalina.User;
 import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.stubbing.OngoingStubbing;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,7 +14,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -78,13 +70,6 @@ class UserApiServiceTest {
         UserDto dto = this.getTestDto();
         when(userApiService.saveUser(dto)).thenReturn(dto);
         Assert.assertEquals(dto, userApiService.saveUser(dto));
-    }
-
-    @Test
-    void testCheckUser() {
-       when(userApiService.checkUser(anyLong())).thenReturn(false);
-        Assert.assertFalse(userApiService.checkUser(1L));
-
     }
 
 

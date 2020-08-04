@@ -50,8 +50,4 @@ public class UserApiService {
         userRepository.save(userEntity);
         return userDto;
     }
-
-    public boolean checkUser(Long userId) {
-        return !userRepository.findById(userId).isPresent();
-    }
 }

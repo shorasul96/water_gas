@@ -41,7 +41,7 @@ class GasApiControllerTest {
     private GasApiService service;
 
     @Test
-    void getAll() throws Exception {
+    void shouldGetAll() throws Exception {
         GasDto dto = new GasDto();
         dto.setUserId(USER_ID);
         dto.setAmount(AMOUNT);
@@ -56,7 +56,7 @@ class GasApiControllerTest {
     }
 
     @Test
-    void getByUserId() throws Exception {
+    void shouldGetByUserId() throws Exception {
         GasDto dto = new GasDto();
         dto.setUserId(USER_ID);
         dto.setAmount(AMOUNT);
@@ -69,9 +69,21 @@ class GasApiControllerTest {
                 .andExpect(jsonPath("$[0].amount").value(AMOUNT))
                 .andExpect(status().isOk());
     }
+    @Test
+    void shouldNotGetByUserIdNotFound() throws Exception {
+        GasDto dto = new GasDto();
+        dto.setUserId(0L);
+        dto.setAmount(AMOUNT);
+
+        when(service.findByUserId(0L)).thenReturn(Stream.of(dto).collect(Collectors.toList()));
+
+        mvc.perform(get("/api/v1/gas/0")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
 
     @Test
-    void createGas() throws Exception {
+    void shouldCreateGas() throws Exception {
         GasDto dto = new GasDto();
         dto.setAmount(AMOUNT);
         dto.setUserId(USER_ID);
@@ -80,5 +92,27 @@ class GasApiControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(dto)))
                 .andExpect(status().isCreated());
+    }
+    @Test
+    void shouldNotCreateGasInvalidUserID() throws Exception {
+        GasDto dto = new GasDto();
+        dto.setAmount(AMOUNT);
+        dto.setUserId(null);
+
+        mvc.perform(post("/api/v1/gas/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(dto)))
+                .andExpect(status().isBadRequest());
+    }
+    @Test
+    void shouldNotCreateGasInvalidAmount() throws Exception {
+        GasDto dto = new GasDto();
+        dto.setAmount(null);
+        dto.setUserId(null);
+
+        mvc.perform(post("/api/v1/gas/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(dto)))
+                .andExpect(status().isBadRequest());
     }
 }

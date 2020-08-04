@@ -4,16 +4,18 @@
 
 ## Installation
 
+Use the **java 1.8** or **higher** [download](https://java.com/en/download/) to working environment 
+
 Use the **POSTGRES 10** [download](https://www.postgresql.org/download/) to work with dataBase.
 
 ```
 create database with name water_gas
 change username & password from application.property files
+
 run Rest_API
-port 8090
+port:8090
 ```
 
-Use the **java 1.8** or **higher** [download](https://java.com/en/download/) to working environment
 
 
 

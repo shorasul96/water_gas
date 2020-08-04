@@ -9,15 +9,14 @@ import lombok.*;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 
-@Getter
-@Setter
+@Data
 @CheckUniqueUsername
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDto implements Serializable {
 
     private Long id;
 
-    @NotEmpty(message = "Пожалуйста, введите аккоунт название пользователя")
+    @NotEmpty(message = "Please, fill the field username")
     private String username;
 
     private Long totalGas;

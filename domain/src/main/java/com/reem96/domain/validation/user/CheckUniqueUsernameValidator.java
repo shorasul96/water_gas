@@ -16,6 +16,8 @@ public class CheckUniqueUsernameValidator implements ConstraintValidator<CheckUn
    @Override
     public boolean isValid(UserDto userDto, ConstraintValidatorContext constraintValidatorContext) {
         if(userDto.getId() == null && userRepository.findByUsernameIgnoreCase(userDto.getUsername()).isPresent()){
+            constraintValidatorContext.disableDefaultConstraintViolation();
+            constraintValidatorContext.buildConstraintViolationWithTemplate("Такой USERNAME с пользователь уже существует в системе!").addConstraintViolation();
             return false;
         }
         return true;

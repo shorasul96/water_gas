@@ -16,7 +16,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Repeatable(CheckUniqueUsername.List.class)
 public @interface CheckUniqueUsername {
-    String message() default "Такой USERNAME с пользователь уже существует в системе!";
+    String message() default "Form is not valid";
 
     Class<?>[] groups() default { };
 

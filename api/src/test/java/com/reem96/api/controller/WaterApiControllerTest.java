@@ -59,7 +59,7 @@ class WaterApiControllerTest {
     }
 
     @Test
-    void getByUserId() throws Exception {
+    void shouldGetByUserId() throws Exception {
 
         WaterDto dto = new WaterDto();
         dto.setAmount(AMOUNT);
@@ -75,9 +75,23 @@ class WaterApiControllerTest {
                 .andExpect(jsonPath("$[0].amount").value(AMOUNT))
                 .andExpect(status().isOk());
     }
+    @Test
+    void shouldNotGetByUserId_IdNotFound() throws Exception {
+
+        WaterDto dto = new WaterDto();
+        dto.setAmount(AMOUNT);
+        dto.setUserId(0L);
+        dto.setIsColdWater(IS_COLD_WATER);
+
+        when(service.findByUserId(anyLong())).thenReturn(null);
+
+        mvc.perform(get("/api/v1/water/0")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
 
     @Test
-    void createWater() throws Exception {
+    void shouldCreateWater() throws Exception {
         WaterDto waterDto = new WaterDto();
         waterDto.setAmount(AMOUNT);
         waterDto.setUserId(USER_ID);
@@ -87,6 +101,32 @@ class WaterApiControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(new ObjectMapper().writeValueAsString(waterDto)))
                 .andExpect(status().isCreated());
+
+    }
+    @Test
+    void shouldNotCreateWater_InvalidUserId() throws Exception {
+        WaterDto waterDto = new WaterDto();
+        waterDto.setAmount(AMOUNT);
+        waterDto.setUserId(null);
+        waterDto.setIsColdWater(IS_COLD_WATER);
+
+        mvc.perform(post("/api/v1/water/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(waterDto)))
+                .andExpect(status().isBadRequest());
+
+    }
+    @Test
+    void shouldNotCreateWater_InvalidAmount() throws Exception {
+        WaterDto waterDto = new WaterDto();
+        waterDto.setAmount(null);
+        waterDto.setUserId(USER_ID);
+        waterDto.setIsColdWater(IS_COLD_WATER);
+
+        mvc.perform(post("/api/v1/water/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(waterDto)))
+                .andExpect(status().isBadRequest());
 
     }
 }

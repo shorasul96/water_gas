@@ -2,7 +2,9 @@ package com.reem96.api.controller;
 
 // Created by Shorasul Sh. on 29.07.2020
 
+import com.reem96.api.service.UserApiService;
 import com.reem96.api.service.WaterApiService;
+import com.reem96.domain.dto.UserDto;
 import com.reem96.domain.dto.WaterDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -21,6 +23,8 @@ import java.util.stream.Collectors;
 public class WaterApiController {
 
     private final WaterApiService waterApiService;
+    private final UserApiService userApiService;
+
 
     @GetMapping("/")
     List<WaterDto> getAll() {
@@ -28,8 +32,12 @@ public class WaterApiController {
     }
 
     @GetMapping("/{id}")
-    List<WaterDto> getByUserId(@PathVariable("id") Long id) {
-        return waterApiService.findByUserId(id);
+    ResponseEntity<?> getByUserId(@PathVariable("id") Long id) {
+        UserDto userDto = userApiService.getById(id);
+        if (userDto.getId() != null) {
+            return new ResponseEntity<>(waterApiService.findByUserId(id), HttpStatus.OK);
+        }
+        return new ResponseEntity<>("User with id: " + id + " not found", HttpStatus.NOT_FOUND);
     }
 
     @ResponseBody

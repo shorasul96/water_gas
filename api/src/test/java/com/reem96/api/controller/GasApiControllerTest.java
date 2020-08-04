@@ -70,13 +70,12 @@ class GasApiControllerTest {
                 .andExpect(status().isOk());
     }
     @Test
-    void shouldNotGetByUserIdNotFound() throws Exception {
+    void shouldNotGetByUser_IdNotFound() throws Exception {
         GasDto dto = new GasDto();
         dto.setUserId(0L);
         dto.setAmount(AMOUNT);
 
-        when(service.findByUserId(0L)).thenReturn(Stream.of(dto).collect(Collectors.toList()));
-
+        when(service.findByUserId(anyLong())).thenReturn(null);
         mvc.perform(get("/api/v1/gas/0")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
@@ -94,7 +93,7 @@ class GasApiControllerTest {
                 .andExpect(status().isCreated());
     }
     @Test
-    void shouldNotCreateGasInvalidUserID() throws Exception {
+    void shouldNotCreateGas_InvalidUserID() throws Exception {
         GasDto dto = new GasDto();
         dto.setAmount(AMOUNT);
         dto.setUserId(null);
@@ -105,7 +104,7 @@ class GasApiControllerTest {
                 .andExpect(status().isBadRequest());
     }
     @Test
-    void shouldNotCreateGasInvalidAmount() throws Exception {
+    void shouldNotCreateGas_InvalidAmount() throws Exception {
         GasDto dto = new GasDto();
         dto.setAmount(null);
         dto.setUserId(null);

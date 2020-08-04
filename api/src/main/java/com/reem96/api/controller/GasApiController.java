@@ -3,7 +3,9 @@ package com.reem96.api.controller;
 // Created by Shorasul Sh. on 29.07.2020
 
 import com.reem96.api.service.GasApiService;
+import com.reem96.api.service.UserApiService;
 import com.reem96.domain.dto.GasDto;
+import com.reem96.domain.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 public class GasApiController {
 
     private final GasApiService gasApiService;
+    private final UserApiService userApiService;
 
     @GetMapping("/")
     List<GasDto> getAll() {
@@ -28,8 +31,12 @@ public class GasApiController {
     }
 
     @GetMapping("/{id}")
-    List<GasDto> getByUserId(@PathVariable("id") Long id) {
-        return gasApiService.findByUserId(id);
+    ResponseEntity<?> getByUserId(@PathVariable("id") Long id) {
+        UserDto userDto = userApiService.getById(id);
+        if (userDto.getId() != null) {
+            return new ResponseEntity<>(gasApiService.findByUserId(id), HttpStatus.OK);
+        }
+        return new ResponseEntity<>("User with id: " + id + " not found", HttpStatus.NOT_FOUND);
     }
 
     @ResponseBody
